@@ -20,7 +20,13 @@ mutation createNote($createInput: CreateInput!) {
 2. More Coming Soon
 
 ## Authorization
-Currently it is using the default setting which is auth via API key. You can obtain the API key from the AppSync console after a successful deploy. That is key is good for 7 days then refreshes.
+Currently it is using the default setting which is auth via API key. You can obtain the API key from the AppSync console after a successful deploy. Alternatively, you can run this command using the AWS CLI and the api id that printed out to your console after a successfuly deploy:
+
+```
+aws appsync list-api-keys --api-id <api id here>
+```
+
+Remember this is key is good for 7 days then refreshes.
 
 If you're using Postman or making API calls through a client make sure to set a header `x-api-key` to the value of your API key.
 

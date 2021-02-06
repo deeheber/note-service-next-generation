@@ -52,6 +52,10 @@ export class NoteServiceStack extends Stack {
 
     new CfnOutput(this, 'apiURL', {
       value: api.graphqlUrl
-    })
+    });
+
+    new CfnOutput(this, 'apiId', {
+      value: api.apiId
+    });
   }
 }
