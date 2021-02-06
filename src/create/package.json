@@ -1,0 +1,12 @@
+{
+  "name": "create-function",
+  "version": "1.0.0",
+  "description": "Lambda resolver for create mutation",
+  "main": "create.js",
+  "author": "Danielle Heberling",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.4.1",
+    "@aws-sdk/util-dynamodb": "^3.4.1",
+    "uuid": "^8.3.2"
+  }
+}

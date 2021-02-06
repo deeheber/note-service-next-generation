@@ -3,8 +3,15 @@ input CreateInput {
 	content: String!
 }
 
+type Note {
+  id: ID!
+  content: String!
+  author: String!
+  createdAt: String!
+}
+
 type Mutation {
-	createNote(note: CreateInput!): String
+	createNote(note: CreateInput!): Note
 }
 
 type Query {

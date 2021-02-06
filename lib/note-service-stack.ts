@@ -10,9 +10,11 @@ export class NoteServiceStack extends Stack {
     const api = new GraphqlApi(this, 'NotesApi', {
       name: 'notes-api',
       logConfig: {
-        fieldLogLevel: FieldLogLevel.ALL,
+        fieldLogLevel: FieldLogLevel.ERROR,
       },
-      schema: Schema.fromAsset('./graphql/schema.graphql')
+      schema: Schema.fromAsset('src/graphql/schema.graphql')
+      // use default auth type of api-key
+      // key expires after 7 days
     });
 
     const notesTable = new Table(this, 'NotesTable', {
@@ -28,7 +30,7 @@ export class NoteServiceStack extends Stack {
       // TODO update to node 14
       runtime: Runtime.NODEJS_12_X,
       handler: 'create.handler',
-      code: Code.fromAsset('lambda'),
+      code: Code.fromAsset('src/create'),
       memorySize: 3008
     });
 
@@ -39,7 +41,7 @@ export class NoteServiceStack extends Stack {
       fieldName: 'createNote'
     });
 
-    createLambda.addEnvironment('POST_TABLE', notesTable.tableName);
+    createLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
     notesTable.grantWriteData(createLambda);
 
     // TODO other queries/mutations
