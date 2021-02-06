@@ -2,7 +2,7 @@
   "name": "note-service-next-generation",
   "version": "0.1.0",
   "bin": {
-    "note-service-next-generation": "bin/note-service-next-generation.js"
+    "note-service": "bin/note-service.js"
   },
   "scripts": {
     "build": "tsc",
@@ -12,11 +12,14 @@
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.88.0",
+    "@aws-cdk/aws-appsync": "^1.88.0",
+    "@aws-cdk/aws-dynamodb": "^1.88.0",
+    "@aws-cdk/aws-lambda": "^1.88.0",
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
+    "aws-cdk": "1.88.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.2.0",
-    "aws-cdk": "1.88.0",
     "ts-node": "^9.0.0",
     "typescript": "~3.9.7"
   },

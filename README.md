@@ -1,8 +1,12 @@
-# Welcome to your CDK TypeScript project!
+# Note Service (Next Generation)
 
-This is a blank project for TypeScript development with CDK.
+Rewriting [note-service](https://github.com/deeheber/note-service) using CDK, TypeScript, and GQL.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Queries
+
+## Mutations
+
+The `cdk.json` file tells the CDK Toolkit how to execute the app.
 
 ## Useful commands
 

@@ -1,0 +1,18 @@
+input CreateInput {
+	author: String!
+	content: String!
+}
+
+type Mutation {
+	createNote(note: CreateInput!): String
+}
+
+type Query {
+  # TODO actually finish this
+	getNote: String
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+}
