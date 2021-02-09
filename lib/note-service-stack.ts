@@ -25,8 +25,7 @@ export class NoteServiceStack extends Stack {
     // create
     const createLambda = new Function(this, 'CreateLambda', {
       functionName: 'create-lambda',
-      // TODO update to node 14
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_14_X,
       handler: 'create.handler',
       code: Code.fromAsset('src/create'),
       memorySize: 3008
@@ -45,8 +44,7 @@ export class NoteServiceStack extends Stack {
     // list
     const listLambda = new Function(this, 'ListLambda', {
       functionName: 'list-lambda',
-      // TODO update to node 14
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_14_X,
       handler: 'list.handler',
       code: Code.fromAsset('src/list'),
       memorySize: 3008
@@ -62,8 +60,26 @@ export class NoteServiceStack extends Stack {
     listLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
     notesTable.grantReadData(listLambda);
 
-    // TODO other queries/mutations
     // get
+    const getLambda = new Function(this, 'GetLambda', {
+      functionName: 'get-lambda',
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'get.handler',
+      code: Code.fromAsset('src/get'),
+      memorySize: 3008
+    });
+
+    const getDs = api.addLambdaDataSource('getDatasource', getLambda);
+
+    getDs.createResolver({
+      typeName: 'Query',
+      fieldName: 'getNote'
+    });
+
+    getLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
+    notesTable.grantReadData(getLambda);
+
+    // TODO other queries/mutations
     // delete
     // update
 

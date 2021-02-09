@@ -1,0 +1,12 @@
+{
+  "name": "get-function",
+  "version": "1.0.0",
+  "description": "Lambda resolver for get query",
+  "main": "get.js",
+  "author": "Danielle Heberling",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.4.1",
+    "@aws-sdk/util-dynamodb": "^3.4.1"
+  }
+}

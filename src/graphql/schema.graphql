@@ -21,6 +21,7 @@ type Mutation {
 }
 
 type Query {
+	getNote(id: ID!): Note
   listNote: ListNoteResult
 }
 

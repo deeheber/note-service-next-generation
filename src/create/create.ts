@@ -1,9 +1,10 @@
 const { v4: uuidv4 } = require('uuid');
 // @ts-ignore: Cannot redeclare block-scoped variable
 const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+// @ts-ignore: Cannot redeclare block-scoped variable
 const { marshall } = require("@aws-sdk/util-dynamodb");
 
-interface AppSyncEvent {
+interface CreateEvent {
   arguments: {
     note: {
       author: string;
@@ -19,7 +20,7 @@ interface Note {
   createdAt: string;
 }
 
-exports.handler = async (event: AppSyncEvent): Promise<Note | Error> => {
+exports.handler = async (event: CreateEvent): Promise<Note | Error> => {
   console.log(JSON.stringify(event, undefined, 2));
 
   try {
@@ -27,7 +28,7 @@ exports.handler = async (event: AppSyncEvent): Promise<Note | Error> => {
       id: uuidv4(),
       content: event.arguments.note.content,
       author: event.arguments.note.author,
-      createdAt: new Date().getTime().toString(),
+      createdAt: new Date().toISOString(),
     };
     const params = {
       TableName: process.env.TABLE_NAME,

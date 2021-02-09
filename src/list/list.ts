@@ -1,5 +1,6 @@
 // @ts-ignore: Cannot redeclare block-scoped variable
 const { DynamoDBClient, ScanCommand } = require("@aws-sdk/client-dynamodb");
+// @ts-ignore: Cannot redeclare block-scoped variable
 const { unmarshall } = require("@aws-sdk/util-dynamodb");
 
 interface Note {
