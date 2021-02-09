@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+// @ts-ignore: Cannot redeclare block-scoped variable
 const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const { marshall } = require("@aws-sdk/util-dynamodb");
 

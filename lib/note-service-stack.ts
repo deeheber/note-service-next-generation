@@ -13,8 +13,6 @@ export class NoteServiceStack extends Stack {
         fieldLogLevel: FieldLogLevel.ERROR,
       },
       schema: Schema.fromAsset('src/graphql/schema.graphql')
-      // use default auth type of api-key
-      // key expires after 7 days
     });
 
     const notesTable = new Table(this, 'NotesTable', {
@@ -44,9 +42,28 @@ export class NoteServiceStack extends Stack {
     createLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
     notesTable.grantWriteData(createLambda);
 
+    // list
+    const listLambda = new Function(this, 'ListLambda', {
+      functionName: 'list-lambda',
+      // TODO update to node 14
+      runtime: Runtime.NODEJS_12_X,
+      handler: 'list.handler',
+      code: Code.fromAsset('src/list'),
+      memorySize: 3008
+    });
+
+    const listDs = api.addLambdaDataSource('listDatasource', listLambda);
+
+    listDs.createResolver({
+      typeName: 'Query',
+      fieldName: 'listNote'
+    });
+
+    listLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
+    notesTable.grantReadData(listLambda);
+
     // TODO other queries/mutations
     // get
-    // list
     // delete
     // update
 

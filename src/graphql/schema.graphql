@@ -8,6 +8,12 @@ type Note {
   content: String!
   author: String!
   createdAt: String!
+	updatedAt: String
+}
+
+type ListNoteResult {
+	total: String
+	items: [Note]
 }
 
 type Mutation {
@@ -15,8 +21,7 @@ type Mutation {
 }
 
 type Query {
-  # TODO actually finish this
-	getNote: String
+  listNote: ListNoteResult
 }
 
 schema {

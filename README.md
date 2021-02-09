@@ -1,10 +1,29 @@
 # Note Service (Next Generation)
 
 Rewriting [note-service](https://github.com/deeheber/note-service) using CDK, TypeScript, and GraphQL
+
 ## Queries
-- Coming soon
+
+1. List notes
+```
+query ListQuery {
+  listNote {
+    items {
+      author
+      content
+      createdAt
+      updatedAt
+      id
+    }
+    total
+  }
+}
+```
+
+2. Get note by id (coming soon)
 
 ## Mutations
+
 1. Create note
 ```
 mutation createNote($createInput: CreateInput!) {
@@ -17,16 +36,19 @@ mutation createNote($createInput: CreateInput!) {
 }
 ```
 
-2. More Coming Soon
+2. Update note (coming soon)
+
+3. Delete note (coming soon)
 
 ## Authorization
+
 Currently it is using the default setting which is auth via API key. You can obtain the API key from the AppSync console after a successful deploy. Alternatively, you can run this command using the AWS CLI and the api id that printed out to your console after a successfuly deploy:
 
 ```
 aws appsync list-api-keys --api-id <api id here>
 ```
 
-Remember this is key is good for 7 days then refreshes.
+This is key is good for 7 days then refreshes.
 
 If you're using Postman or making API calls through a client make sure to set a header `x-api-key` to the value of your API key.
 
