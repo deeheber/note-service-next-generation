@@ -20,18 +20,30 @@ query ListQuery {
 }
 ```
 
-2. Get note by id (coming soon)
+2. Get note by id
+```
+query GetNote($id: ID = "Note id goes here") {
+  getNote(id: $id) {
+    author
+    content
+    createdAt
+    id
+    updatedAt
+  }
+}
+```
 
 ## Mutations
 
 1. Create note
 ```
-mutation createNote($createInput: CreateInput!) {
-  createNote(note: $createInput) {
-    id,
-    content,
-    author,
+mutation CreateNote($author: String = "Author goes here", $content: String = "Content goes here") {
+  createNote(note: {author: $author, content: $content}) {
+    author
+    content
     createdAt
+    id
+    updatedAt
   }
 }
 ```
