@@ -1,0 +1,12 @@
+{
+  "name": "delete-function",
+  "version": "1.0.0",
+  "description": "Lambda resolver for delete query",
+  "main": "delete.js",
+  "author": "Danielle Heberling",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.4.1",
+    "@aws-sdk/util-dynamodb": "^3.4.1"
+  }
+}

@@ -11,18 +11,19 @@ type Note {
 	updatedAt: String
 }
 
-type ListNoteResult {
+type ListNotesResult {
 	total: String
 	items: [Note]
 }
 
 type Mutation {
 	createNote(note: CreateInput!): Note
+	deleteNote(id: ID!): ID
 }
 
 type Query {
 	getNote(id: ID!): Note
-  listNote: ListNoteResult
+  listNotes: ListNotesResult
 }
 
 schema {

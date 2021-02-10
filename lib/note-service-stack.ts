@@ -54,7 +54,7 @@ export class NoteServiceStack extends Stack {
 
     listDs.createResolver({
       typeName: 'Query',
-      fieldName: 'listNote'
+      fieldName: 'listNotes'
     });
 
     listLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
@@ -79,8 +79,26 @@ export class NoteServiceStack extends Stack {
     getLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
     notesTable.grantReadData(getLambda);
 
-    // TODO other queries/mutations
     // delete
+    const deleteLambda = new Function(this, 'DeleteLambda', {
+      functionName: 'delete-lambda',
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'delete.handler',
+      code: Code.fromAsset('src/delete'),
+      memorySize: 3008
+    });
+
+    const deleteDs = api.addLambdaDataSource('deleteDatasource', deleteLambda);
+
+    deleteDs.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'deleteNote'
+    });
+
+    deleteLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
+    notesTable.grantWriteData(deleteLambda);
+
+    // TODO
     // update
 
     new CfnOutput(this, 'apiURL', {

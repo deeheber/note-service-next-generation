@@ -6,8 +6,8 @@ Rewriting [note-service](https://github.com/deeheber/note-service) using CDK, Ty
 
 1. List notes
 ```
-query ListQuery {
-  listNote {
+query ListNotes {
+  listNotes {
     items {
       author
       content
@@ -48,9 +48,14 @@ mutation CreateNote($author: String = "Author goes here", $content: String = "Co
 }
 ```
 
-2. Update note (coming soon)
+2. Delete note
+```
+mutation DeleteNote($id: ID = "ID to delete goes here") {
+  deleteNote(id: $id)
+}
+```
 
-3. Delete note (coming soon)
+3. Update note (coming soon)
 
 ## Authorization
 

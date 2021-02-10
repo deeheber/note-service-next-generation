@@ -19,12 +19,11 @@ interface NotesList {
 exports.handler = async (event: any): Promise<NotesList | Error> => {
   console.log(JSON.stringify(event, undefined, 2));
 
-  const params = {
-    TableName: process.env.TABLE_NAME,
-    Select: 'ALL_ATTRIBUTES'
-  };
-
   try {
+    const params = {
+      TableName: process.env.TABLE_NAME,
+      Select: 'ALL_ATTRIBUTES'
+    };
     const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
     // Scaning an entire table can be slow and expensive on larger tables
     // This is just a sandbox experiment with a smaller table
