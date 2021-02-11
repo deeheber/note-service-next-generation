@@ -19,6 +19,7 @@ type ListNotesResult {
 type Mutation {
 	createNote(note: CreateInput!): Note
 	deleteNote(id: ID!): ID
+	updateNote(id: ID! content: String!): Note
 }
 
 type Query {

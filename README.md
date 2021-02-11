@@ -55,7 +55,18 @@ mutation DeleteNote($id: ID = "ID to delete goes here") {
 }
 ```
 
-3. Update note (coming soon)
+3. Update note
+```
+mutation UpdateNote($content: String = "add note content here") {
+  updateNote(content: $content, id: "add note id here") {
+    updatedAt
+    id
+    createdAt
+    content
+    author
+  }
+}
+```
 
 ## Authorization
 

@@ -28,7 +28,7 @@ exports.handler = async (event: CreateEvent): Promise<Note | Error> => {
       id: uuidv4(),
       content: event.arguments.note.content,
       author: event.arguments.note.author,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
     };
     const params = {
       TableName: process.env.TABLE_NAME,

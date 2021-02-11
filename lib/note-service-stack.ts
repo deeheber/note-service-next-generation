@@ -98,8 +98,24 @@ export class NoteServiceStack extends Stack {
     deleteLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
     notesTable.grantWriteData(deleteLambda);
 
-    // TODO
     // update
+    const updateLambda = new Function(this, 'UpdateLambda', {
+      functionName: 'update-lambda',
+      runtime: Runtime.NODEJS_14_X,
+      handler: 'update.handler',
+      code: Code.fromAsset('src/update'),
+      memorySize: 3008
+    });
+
+    const updateDs = api.addLambdaDataSource('updateDatasource', updateLambda);
+
+    updateDs.createResolver({
+      typeName: 'Mutation',
+      fieldName: 'updateNote'
+    });
+
+    updateLambda.addEnvironment('TABLE_NAME', notesTable.tableName);
+    notesTable.grantWriteData(updateLambda);
 
     new CfnOutput(this, 'apiURL', {
       value: api.graphqlUrl
