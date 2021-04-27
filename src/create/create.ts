@@ -1,8 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 // @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 // @ts-ignore: Cannot redeclare block-scoped variable
-const { marshall } = require("@aws-sdk/util-dynamodb");
+const { DynamoDBDocumentClient, PutCommand } = require("@aws-sdk/lib-dynamodb");
 
 interface CreateEvent {
   arguments: {
@@ -32,11 +32,12 @@ exports.handler = async (event: CreateEvent): Promise<Note | Error> => {
     };
     const params = {
       TableName: process.env.TABLE_NAME,
-      Item: marshall(input)
+      Item: input
     };
   
-    const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
-    await dbclient.send(new PutItemCommand(params));
+    const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+    const ddbDocClient = DynamoDBDocumentClient.from(client);
+    await ddbDocClient.send(new PutCommand(params));
 
     return input;
   } catch (err) {

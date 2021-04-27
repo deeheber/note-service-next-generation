@@ -1,7 +1,7 @@
 // @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 // @ts-ignore: Cannot redeclare block-scoped variable
-const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
+const { DynamoDBDocumentClient, GetCommand } = require("@aws-sdk/lib-dynamodb");
 
 interface GetEvent {
   arguments: {
@@ -23,14 +23,13 @@ exports.handler = async (event: GetEvent): Promise<Note | Error> => {
   try {
     const params = {
       TableName: process.env.TABLE_NAME,
-      Key: marshall({
-        id: event.arguments.id
-      })
+      Key: { id: event.arguments.id }
     };
-    const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
+    const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+    const ddbDocClient = DynamoDBDocumentClient.from(client);
 
-    const { Item } = await dbclient.send(new GetItemCommand(params));
-    const response = unmarshall(Item);
+    const { Item } = await ddbDocClient.send(new GetCommand(params));
+    const response = Item;
     return response;
   } catch (err) {
     console.error(`SOMETHING WENT WRONG: ${JSON.stringify(err, undefined, 2)}`);
