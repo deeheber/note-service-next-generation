@@ -1,7 +1,7 @@
 // @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBClient, ScanCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 // @ts-ignore: Cannot redeclare block-scoped variable
-const { unmarshall } = require("@aws-sdk/util-dynamodb");
+const { DynamoDBDocumentClient, ScanCommand } = require("@aws-sdk/lib-dynamodb");
 
 interface Note {
   id: string;
@@ -24,14 +24,15 @@ exports.handler = async (event: any): Promise<NotesList | Error> => {
       TableName: process.env.TABLE_NAME,
       Select: 'ALL_ATTRIBUTES'
     };
-    const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
+    const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+    const ddbDocClient = DynamoDBDocumentClient.from(client);
     // Scaning an entire table can be slow and expensive on larger tables
     // This is just a sandbox experiment with a smaller table
     // If you have a larger table, use Query and paginate the responses
-    const { Count, Items } = await dbclient.send(new ScanCommand(params));
+    const { Count, Items } = await ddbDocClient.send(new ScanCommand(params));
     const response: NotesList = {
       total: Count,
-      items: Items.map((item:object) => unmarshall(item))
+      items: Items
     };
     
     return response;

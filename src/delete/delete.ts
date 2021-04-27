@@ -1,7 +1,7 @@
 // @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBClient, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 // @ts-ignore: Cannot redeclare block-scoped variable
-const { marshall } = require("@aws-sdk/util-dynamodb");
+const { DynamoDBDocumentClient, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
 
 interface DeleteEvent {
   arguments: {
@@ -17,11 +17,12 @@ exports.handler = async (event: DeleteEvent): Promise<string | Error> => {
     // TODO possibly add a condition expression that checks the item exists before deleting it
     const params = {
       TableName: process.env.TABLE_NAME,
-      Key: marshall({ id })
+      Key: { id }
     };
     
-    const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
-    await dbclient.send(new DeleteItemCommand(params));
+    const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+    const ddbDocClient = DynamoDBDocumentClient.from(client);
+    await ddbDocClient.send(new DeleteCommand(params));
 
     return id;
   } catch (err) {
