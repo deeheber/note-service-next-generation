@@ -33,8 +33,10 @@ exports.handler = async (event: UpdateEvent): Promise<UpdatedNote | Error>=> {
       ReturnValues: 'ALL_NEW'
     };
 
-    const dbclient = new DynamoDBClient({ region: process.env.AWS_REGION });
-    const { Attributes } = await dbclient.send(new UpdateCommand(params));
+    const client = new DynamoDBClient({ region: process.env.AWS_REGION });
+    const ddbDocClient = DynamoDBDocumentClient.from(client);
+
+    const { Attributes } = await ddbDocClient.send(new UpdateCommand(params));
 
     return Attributes;
   } catch (err) {
