@@ -11,7 +11,13 @@
     "test": "jest",
     "cdk": "cdk",
     "deploy": "npm run build && npm run cdk deploy -a NoteServiceStack",
-    "synth": "npm run cdk synth > template.yaml"
+    "synth": "npm run cdk synth > template.yaml",
+    "install:create": "cd src/create && npm install",
+    "install:delete": "cd src/delete && npm install",
+    "install:get": "cd src/get && npm install",
+    "install:list": "cd src/list && npm install",
+    "install:update": "cd src/update && npm install",
+    "postinstall": "run-p install:*"
   },
   "devDependencies": {
     "@aws-cdk/assert": "^1.100.0",
@@ -22,6 +28,7 @@
     "@types/node": "^15.0.1",
     "aws-cdk": "^1.100.0",
     "jest": "^27.0.3",
+    "npm-run-all": "^4.1.5",
     "ts-jest": "^27.0.2",
     "ts-node": "^10.0.0",
     "typescript": "^4.2.4"
