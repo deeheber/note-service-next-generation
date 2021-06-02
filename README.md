@@ -107,3 +107,6 @@ mutation UpdateNote($content: String = "add note content here") {
  * `npm run cdk synth`  emits the synthesized CloudFormation template
 
  The `cdk.json` file tells the CDK Toolkit how to execute the app.
+
+ ## Contributing
+ See [CONTRIBUTING.md](https://github.com/deeheber/note-service-next-generation/blob/main/CONTRIBUTING.md) for more info on our guildelines.
