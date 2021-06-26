@@ -5,8 +5,9 @@
   "main": "create.js",
   "author": "Danielle Heberling",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.17.0",
-    "@aws-sdk/lib-dynamodb": "^3.17.0",
+    "@aws-sdk/client-dynamodb": "^3.19.0",
+    "@aws-sdk/lib-dynamodb": "^3.19.0",
+    "@aws-sdk/util-dynamodb": "^3.19.0",
     "uuid": "^8.3.2"
   }
 }

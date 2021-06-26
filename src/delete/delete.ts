@@ -25,7 +25,7 @@ exports.handler = async (event: DeleteEvent): Promise<string | Error> => {
     await ddbDocClient.send(new DeleteCommand(params));
 
     return id;
-  } catch (err) {
+  } catch (err: any) {
     console.error(`SOMETHING WENT WRONG: ${JSON.stringify(err, undefined, 2)}`);
     throw new Error(`${err.message}`);
   }

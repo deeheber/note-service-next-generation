@@ -18,7 +18,7 @@ interface UpdatedNote {
   updatedAt: string;
 }
 
-exports.handler = async (event: UpdateEvent): Promise<UpdatedNote | Error>=> {
+exports.handler = async (event: UpdateEvent): Promise<UpdatedNote | Error> => {
   console.log(JSON.stringify(event, undefined, 2));
 
   try {  
@@ -39,7 +39,7 @@ exports.handler = async (event: UpdateEvent): Promise<UpdatedNote | Error>=> {
     const { Attributes } = await ddbDocClient.send(new UpdateCommand(params));
 
     return Attributes;
-  } catch (err) {
+  } catch (err: any) {
     console.error(`SOMETHING WENT WRONG: ${JSON.stringify(err, undefined, 2)}`);
     throw new Error(`${err.message}`);
   }

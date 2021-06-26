@@ -36,7 +36,7 @@ exports.handler = async (event: any): Promise<NotesList | Error> => {
     };
     
     return response;
-  } catch (err) {
+  } catch (err: any) {
     console.error(`SOMETHING WENT WRONG: ${JSON.stringify(err, undefined, 2)}`);
     throw new Error(`${err.message}`);
   }

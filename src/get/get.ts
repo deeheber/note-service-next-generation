@@ -31,7 +31,7 @@ exports.handler = async (event: GetEvent): Promise<Note | Error> => {
     const { Item } = await ddbDocClient.send(new GetCommand(params));
     const response = Item;
     return response;
-  } catch (err) {
+  } catch (err: any) {
     console.error(`SOMETHING WENT WRONG: ${JSON.stringify(err, undefined, 2)}`);
     throw new Error(`${err.message}`);
   }
