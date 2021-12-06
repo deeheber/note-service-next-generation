@@ -2,6 +2,8 @@
 
 Rewriting [note-service](https://github.com/deeheber/note-service) using CDK, TypeScript, and GraphQL. It's a CRUD app for storing notes.
 
+**Note: the current iteration is using CDK v1. There's an [open issue](https://github.com/deeheber/note-service-next-generation/issues/10) to upgrade and make sure this works with v2.**
+
 ## Getting Started
 
 ### Prerequisite Setup
