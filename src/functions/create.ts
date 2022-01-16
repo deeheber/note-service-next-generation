@@ -1,8 +1,6 @@
-const { v4: uuidv4 } = require('uuid');
-// @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-// @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBDocumentClient, PutCommand } = require("@aws-sdk/lib-dynamodb");
+import { randomUUID } from 'crypto';
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 
 interface CreateEvent {
   arguments: {
@@ -20,12 +18,12 @@ interface Note {
   createdAt: string;
 }
 
-exports.handler = async (event: CreateEvent): Promise<Note | Error> => {
+export const handler = async (event: CreateEvent): Promise<Note | Error> => {
   console.log(JSON.stringify(event, undefined, 2));
 
   try {
     const input: Note = {
-      id: uuidv4(),
+      id: randomUUID(),
       content: event.arguments.note.content,
       author: event.arguments.note.author,
       createdAt: new Date().toISOString()
