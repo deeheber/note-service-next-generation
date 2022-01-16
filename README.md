@@ -1,5 +1,7 @@
 # Note Service (Next Generation)
 
+*Note*: this branch corresponds with the demo in [this blog post](https://www.danielleheberling.xyz/blog/appsync-cdk/). For the most update to date code check out the [main branch](https://github.com/deeheber/note-service-next-generation).
+
 Rewriting [note-service](https://github.com/deeheber/note-service) using CDK, TypeScript, and GraphQL. It's a CRUD app for storing notes.
 
 ## Getting Started
