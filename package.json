@@ -1,39 +1,38 @@
 {
   "name": "note-service-next-generation",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "bin": {
     "note-service": "bin/note-service.js"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "clean": "tsc --build --clean",
+    "clean": "rm -rf dist",
     "test": "jest",
     "cdk": "cdk",
-    "deploy": "npm run build && npm run cdk deploy -a NoteServiceStack",
-    "synth": "npm run cdk synth > template.yaml",
-    "install:create": "cd src/create && npm install",
-    "install:delete": "cd src/delete && npm install",
-    "install:get": "cd src/get && npm install",
-    "install:list": "cd src/list && npm install",
-    "install:update": "cd src/update && npm install",
-    "postinstall": "run-p install:*"
+    "deploy": "npm run clean && npm run build && npm run cdk deploy -a NoteServiceStack",
+    "synth": "npm run cdk synth > template.yaml"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.110.0",
-    "@aws-cdk/aws-appsync": "^1.110.0",
-    "@aws-cdk/aws-dynamodb": "^1.110.0",
-    "@aws-cdk/aws-lambda": "^1.110.0",
-    "@types/jest": "^26.0.23",
-    "@types/node": "^15.0.1",
-    "aws-cdk": "^1.110.0",
-    "jest": "^27.0.3",
-    "npm-run-all": "^4.1.5",
+    "@aws-cdk/assert": "^1.139.0",
+    "@aws-cdk/aws-appsync": "^1.139.0",
+    "@aws-cdk/aws-dynamodb": "^1.139.0",
+    "@aws-cdk/aws-lambda": "^1.139.0",
+    "@aws-cdk/aws-lambda-nodejs": "^1.139.0",
+    "@aws-cdk/aws-logs": "^1.139.0",
+    "@aws-cdk/core": "^1.139.0",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^17.0.8",
+    "aws-cdk": "^1.139.0",
+    "esbuild": "^0.14.11",
+    "jest": "^27.4.7",
     "ts-jest": "^27.0.2",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.2.4"
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
   },
   "dependencies": {
-    "@aws-cdk/core": "^1.110.0"
+    "@aws-sdk/client-dynamodb": "^3.47.0",
+    "@aws-sdk/lib-dynamodb": "^3.47.0",
+    "@aws-sdk/util-dynamodb": "^3.47.0"
   }
 }

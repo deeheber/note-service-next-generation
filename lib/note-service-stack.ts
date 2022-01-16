@@ -1,7 +1,9 @@
 import { CfnOutput, Construct, RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
 import { FieldLogLevel, GraphqlApi, Schema } from '@aws-cdk/aws-appsync';
 import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
-import { Code, Function, Runtime } from '@aws-cdk/aws-lambda';
+import { Architecture, Runtime } from '@aws-cdk/aws-lambda';
+import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
+import { RetentionDays } from '@aws-cdk/aws-logs';
 
 export class NoteServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -23,12 +25,13 @@ export class NoteServiceStack extends Stack {
     });
 
     // create
-    const createLambda = new Function(this, 'CreateLambda', {
+    const createLambda = new NodejsFunction(this, 'CreateLambda', {
       functionName: 'create-lambda',
       runtime: Runtime.NODEJS_14_X,
-      handler: 'create.handler',
-      code: Code.fromAsset('src/create'),
-      memorySize: 3008
+      entry: 'dist/src/functions/create.js',
+      logRetention: RetentionDays.ONE_WEEK,
+      architecture: Architecture.ARM_64,
+      memorySize: 3008,
     });
 
     const createDs = api.addLambdaDataSource('createDatasource', createLambda);
@@ -42,11 +45,12 @@ export class NoteServiceStack extends Stack {
     notesTable.grantWriteData(createLambda);
 
     // list
-    const listLambda = new Function(this, 'ListLambda', {
+    const listLambda = new NodejsFunction(this, 'ListLambda', {
       functionName: 'list-lambda',
       runtime: Runtime.NODEJS_14_X,
-      handler: 'list.handler',
-      code: Code.fromAsset('src/list'),
+      entry: 'dist/src/functions/list.js',
+      logRetention: RetentionDays.ONE_WEEK,
+      architecture: Architecture.ARM_64,
       memorySize: 3008
     });
 
@@ -61,11 +65,12 @@ export class NoteServiceStack extends Stack {
     notesTable.grantReadData(listLambda);
 
     // get
-    const getLambda = new Function(this, 'GetLambda', {
+    const getLambda = new NodejsFunction(this, 'GetLambda', {
       functionName: 'get-lambda',
       runtime: Runtime.NODEJS_14_X,
-      handler: 'get.handler',
-      code: Code.fromAsset('src/get'),
+      entry: 'dist/src/functions/get.js',
+      logRetention: RetentionDays.ONE_WEEK,
+      architecture: Architecture.ARM_64,
       memorySize: 3008
     });
 
@@ -80,11 +85,12 @@ export class NoteServiceStack extends Stack {
     notesTable.grantReadData(getLambda);
 
     // delete
-    const deleteLambda = new Function(this, 'DeleteLambda', {
+    const deleteLambda = new NodejsFunction(this, 'DeleteLambda', {
       functionName: 'delete-lambda',
       runtime: Runtime.NODEJS_14_X,
-      handler: 'delete.handler',
-      code: Code.fromAsset('src/delete'),
+      entry: 'dist/src/functions/delete.js',
+      logRetention: RetentionDays.ONE_WEEK,
+      architecture: Architecture.ARM_64,
       memorySize: 3008
     });
 
@@ -99,11 +105,12 @@ export class NoteServiceStack extends Stack {
     notesTable.grantWriteData(deleteLambda);
 
     // update
-    const updateLambda = new Function(this, 'UpdateLambda', {
+    const updateLambda = new NodejsFunction(this, 'UpdateLambda', {
       functionName: 'update-lambda',
       runtime: Runtime.NODEJS_14_X,
-      handler: 'update.handler',
-      code: Code.fromAsset('src/update'),
+      entry: 'dist/src/functions/update.js',
+      logRetention: RetentionDays.ONE_WEEK,
+      architecture: Architecture.ARM_64,
       memorySize: 3008
     });
 
@@ -124,5 +131,15 @@ export class NoteServiceStack extends Stack {
     new CfnOutput(this, 'apiId', {
       value: api.apiId
     });
+
+    /**
+     * Quick hack to quickly get the GQL API key
+     * This will print out the API key to the console, so you probably don't want to do this for security reasons.
+     */
+    // if (api.apiKey) {
+    //   new CfnOutput(this, 'apiKey', {
+    //     value: api.apiKey
+    //   });
+    // }
   }
 }

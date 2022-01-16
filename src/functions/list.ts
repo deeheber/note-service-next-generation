@@ -1,7 +1,5 @@
-// @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-// @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBDocumentClient, ScanCommand } = require("@aws-sdk/lib-dynamodb");
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 
 interface Note {
   id: string;
@@ -12,11 +10,11 @@ interface Note {
 }
 
 interface NotesList {
-  total: number;
+  total: number | undefined;
   items: Note[];
 }
 
-exports.handler = async (event: any): Promise<NotesList | Error> => {
+export const handler = async (event: any): Promise<NotesList | Error> => {
   console.log(JSON.stringify(event, undefined, 2));
 
   try {
@@ -32,7 +30,8 @@ exports.handler = async (event: any): Promise<NotesList | Error> => {
     const { Count, Items } = await ddbDocClient.send(new ScanCommand(params));
     const response: NotesList = {
       total: Count,
-      items: Items
+      // TODO fix this casting
+      items: Items as Note[]
     };
     
     return response;

@@ -1,7 +1,5 @@
-// @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-// @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBDocumentClient, GetCommand } = require("@aws-sdk/lib-dynamodb");
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
 
 interface GetEvent {
   arguments: {
@@ -17,7 +15,7 @@ interface Note {
   updatedAt?: string;
 }
 
-exports.handler = async (event: GetEvent): Promise<Note | Error> => {
+export const handler = async (event: GetEvent): Promise<Note | Error> => {
   console.log(JSON.stringify(event, undefined, 2));
 
   try {
@@ -30,7 +28,8 @@ exports.handler = async (event: GetEvent): Promise<Note | Error> => {
 
     const { Item } = await ddbDocClient.send(new GetCommand(params));
     const response = Item;
-    return response;
+    // TODO fix this casting
+    return response as Note;
   } catch (err: any) {
     console.error(`SOMETHING WENT WRONG: ${JSON.stringify(err, undefined, 2)}`);
     throw new Error(`${err.message}`);

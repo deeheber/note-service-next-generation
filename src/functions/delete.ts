@@ -1,7 +1,5 @@
-// @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-// @ts-ignore: Cannot redeclare block-scoped variable
-const { DynamoDBDocumentClient, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 
 interface DeleteEvent {
   arguments: {
@@ -9,7 +7,7 @@ interface DeleteEvent {
   }
 }
 
-exports.handler = async (event: DeleteEvent): Promise<string | Error> => {
+export const handler = async (event: DeleteEvent): Promise<string | Error> => {
   console.log(JSON.stringify(event, undefined, 2));
 
   try {
