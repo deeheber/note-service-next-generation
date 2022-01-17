@@ -1,9 +1,11 @@
-import { CfnOutput, Construct, RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
-import { FieldLogLevel, GraphqlApi, Schema } from '@aws-cdk/aws-appsync';
-import { AttributeType, BillingMode, Table } from '@aws-cdk/aws-dynamodb';
-import { Architecture, Runtime } from '@aws-cdk/aws-lambda';
-import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
-import { RetentionDays } from '@aws-cdk/aws-logs';
+import { Construct } from 'constructs';
+import { Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, RemovalPolicy } from 'aws-cdk-lib';
+import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { FieldLogLevel, GraphqlApi, Schema } from '@aws-cdk/aws-appsync-alpha';
 
 export class NoteServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
