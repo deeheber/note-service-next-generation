@@ -2,8 +2,6 @@
 
 Rewriting [note-service](https://github.com/deeheber/note-service) using CDK, TypeScript, and GraphQL. It's a CRUD app for storing notes.
 
-**Note: the current iteration is using CDK v1. There's an [open issue](https://github.com/deeheber/note-service-next-generation/issues/10) to upgrade and make sure this works with v2.**
-
 ## Getting Started
 
 ### Prerequisite Setup
@@ -16,7 +14,7 @@ Rewriting [note-service](https://github.com/deeheber/note-service) using CDK, Ty
 ### Run the Application
 
 1. Clone this repo and run `npm install` from the project root.
-2. From the project root run `npm run deploy`. This will deploy this application using the `cdk` to your bootstrapped AWS account/region.
+2. From the project root run `npm run deploy`. This will build and deploy this application using the `cdk` to your bootstrapped AWS account/region.
   2a. If using a non-default AWS profile, you can `npm run build` to build the TypeScript and then run `npm run cdk deploy -- --profile <your-profile-name-here>`
 3. Get the `apiId` and `apiURL` from the output in your console. You will need these values later to make requets to the API.
 4. Send requests to the application using a third party client or login to the AWS AppSync console and make requests from `Queries`. I personally like to use Postman, but [here's some other suggestions](https://www.apollographql.com/blog/graphql/examples/4-simple-ways-to-call-a-graphql-api/) if you don't have a preferred way to send requests to an API.
@@ -98,6 +96,9 @@ mutation UpdateNote($content: String = "add note content here") {
   }
 }
 ```
+
+### Clean up (optional but good for your wallet)
+To remote the CloudFormation stack and created resources run `npm run destroy` and confirm on the command line from the project root.
 
 ## Useful commands
 

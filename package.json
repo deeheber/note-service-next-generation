@@ -11,6 +11,7 @@
     "test": "jest",
     "cdk": "cdk",
     "deploy": "npm run clean && npm run build && npm run cdk deploy -a NoteServiceStack",
+    "destroy": "npm run cdk destroy -a NoteServiceStack",
     "synth": "npm run cdk synth > template.yaml"
   },
   "peerDependencies": {
