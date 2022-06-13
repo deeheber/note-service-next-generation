@@ -29,7 +29,7 @@ export class NoteServiceStack extends Stack {
     // create
     const createLambda = new NodejsFunction(this, 'CreateLambda', {
       functionName: 'create-lambda',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_16_X,
       entry: 'dist/src/functions/create.js',
       logRetention: RetentionDays.ONE_WEEK,
       architecture: Architecture.ARM_64,
@@ -49,7 +49,7 @@ export class NoteServiceStack extends Stack {
     // list
     const listLambda = new NodejsFunction(this, 'ListLambda', {
       functionName: 'list-lambda',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_16_X,
       entry: 'dist/src/functions/list.js',
       logRetention: RetentionDays.ONE_WEEK,
       architecture: Architecture.ARM_64,
@@ -69,7 +69,7 @@ export class NoteServiceStack extends Stack {
     // get
     const getLambda = new NodejsFunction(this, 'GetLambda', {
       functionName: 'get-lambda',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_16_X,
       entry: 'dist/src/functions/get.js',
       logRetention: RetentionDays.ONE_WEEK,
       architecture: Architecture.ARM_64,
@@ -89,7 +89,7 @@ export class NoteServiceStack extends Stack {
     // delete
     const deleteLambda = new NodejsFunction(this, 'DeleteLambda', {
       functionName: 'delete-lambda',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_16_X,
       entry: 'dist/src/functions/delete.js',
       logRetention: RetentionDays.ONE_WEEK,
       architecture: Architecture.ARM_64,
@@ -109,7 +109,7 @@ export class NoteServiceStack extends Stack {
     // update
     const updateLambda = new NodejsFunction(this, 'UpdateLambda', {
       functionName: 'update-lambda',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_16_X,
       entry: 'dist/src/functions/update.js',
       logRetention: RetentionDays.ONE_WEEK,
       architecture: Architecture.ARM_64,
