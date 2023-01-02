@@ -1,11 +1,11 @@
 import { Construct } from 'constructs';
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { CfnOutput, RemovalPolicy, aws_lambda as lambda } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { FieldLogLevel, GraphqlApi, Schema } from '@aws-cdk/aws-appsync-alpha';
+import { FieldLogLevel, GraphqlApi, SchemaFile } from '@aws-cdk/aws-appsync-alpha';
 
 export class NoteServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -17,13 +17,14 @@ export class NoteServiceStack extends Stack {
       logConfig: {
         fieldLogLevel: FieldLogLevel.ERROR,
       },
-      schema: Schema.fromAsset('src/graphql/schema.graphql'),
+      schema: SchemaFile.fromAsset('src/graphql/schema.graphql'),
     });
 
     // Create DynamoDB table
     const notesTable = new Table(this, 'NotesTable', {
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: { name: 'id', type: AttributeType.STRING },
+      // TODO: you probably don't want this setting in a production environment
       removalPolicy: RemovalPolicy.DESTROY,
       tableName: 'notes-table',
     });
@@ -41,6 +42,7 @@ export class NoteServiceStack extends Stack {
     this.createResolverMappings({
       api,
       dataSourceName: 'createDatasource',
+      resolverName: 'createResolver',
       lambdaFunction: createLambda,
       typeName: 'Mutation',
       fieldName: 'createNote',
@@ -61,6 +63,7 @@ export class NoteServiceStack extends Stack {
     this.createResolverMappings({
       api,
       dataSourceName: 'listDatasource',
+      resolverName: 'listResolver',
       lambdaFunction: listLambda,
       typeName: 'Query',
       fieldName: 'listNotes',
@@ -81,6 +84,7 @@ export class NoteServiceStack extends Stack {
     this.createResolverMappings({
       api,
       dataSourceName: 'getDatasource',
+      resolverName: 'getResolver',
       lambdaFunction: getLambda,
       typeName: 'Query',
       fieldName: 'getNote',
@@ -101,6 +105,7 @@ export class NoteServiceStack extends Stack {
     this.createResolverMappings({
       api,
       dataSourceName: 'deleteDatasource',
+      resolverName: 'deleteResolver',
       lambdaFunction: deleteLambda,
       typeName: 'Mutation',
       fieldName: 'deleteNote',
@@ -121,6 +126,7 @@ export class NoteServiceStack extends Stack {
     this.createResolverMappings({
       api,
       dataSourceName: 'updateDatasource',
+      resolverName: 'updateResolver',
       lambdaFunction: updateLambda,
       typeName: 'Mutation',
       fieldName: 'updateNote',
@@ -158,12 +164,13 @@ export class NoteServiceStack extends Stack {
   }): lambda.Function {
     const { lambdaId, functionName, entry, environment } = params;
 
-    return new NodejsFunction(this, `${lambdaId}`, {
+    return new NodejsFunction(this, lambdaId, {
       functionName,
-      runtime: Runtime.NODEJS_16_X,
+      runtime: Runtime.NODEJS_18_X,
       entry,
       logRetention: RetentionDays.ONE_WEEK,
       architecture: Architecture.ARM_64,
+      timeout: Duration.seconds(15),
       memorySize: 3008,
       environment,
     });
@@ -172,18 +179,19 @@ export class NoteServiceStack extends Stack {
   private createResolverMappings(params: {
     api: GraphqlApi;
     dataSourceName: string;
+    resolverName: string;
     lambdaFunction: lambda.Function;
     typeName: string;
     fieldName: string;
   }): void {
-    const { api, dataSourceName, lambdaFunction, typeName, fieldName } = params;
+    const { api, dataSourceName, resolverName, lambdaFunction, typeName, fieldName } = params;
 
     const dataSource = api.addLambdaDataSource(
-      `${dataSourceName}`,
+      dataSourceName,
       lambdaFunction
     );
 
-    dataSource.createResolver({
+    dataSource.createResolver(resolverName, {
       typeName,
       fieldName,
     });
