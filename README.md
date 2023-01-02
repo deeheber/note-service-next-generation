@@ -9,7 +9,7 @@ Rewriting [note-service](https://github.com/deeheber/note-service) using CDK, Ty
 1. Sign up for an [AWS account](https://aws.amazon.com/console/).
 2. Follow the [instructions to install and configure the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) on your computer.
 3. [Bootstrap](https://docs.aws.amazon.com/cdk/latest/guide/bootstrapping.html) your AWS account ("environment") with the CDK.
-4. Install [NodeJS](https://nodejs.org/en/) on your computer. We recommend version 14 or above.
+4. Install [NodeJS](https://nodejs.org/en/) on your computer. We recommend the version specified in the `.nvmrc` file in the root of this project.
 
 ### Run the Application
 
