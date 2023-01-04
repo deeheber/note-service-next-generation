@@ -1,16 +1,36 @@
-import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
 import { App } from 'aws-cdk-lib';
+import { Template } from 'aws-cdk-lib/assertions';
 
-import * as NoteService from '../lib/note-service-stack';
+import { NoteServiceStack } from '../lib/note-service-stack';
 
-// TODO actually write tests
-// https://github.com/deeheber/note-service-next-generation/issues/6
-test('Empty Stack', () => {
-    const app = new App();
-    // WHEN
-    const stack = new NoteService.NoteServiceStack(app, 'MyTestStack');
-    // THEN
-    expectCDK(stack).to(matchTemplate({
-      "Resources": {}
-    }, MatchStyle.EXACT))
+test('Verify resources are created', () => {
+  const app = new App();
+  const stack = new NoteServiceStack(app, 'MyTestStack');
+  const template = Template.fromStack(stack);
+
+  template.resourceCountIs('AWS::DynamoDB::Table', 1);
+  template.resourceCountIs('AWS::AppSync::GraphQLApi', 1);
+  template.resourceCountIs('AWS::AppSync::GraphQLSchema', 1);
+  template.resourceCountIs('AWS::AppSync::Resolver', 5);
+
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    FunctionName: 'list-lambda',
+    Runtime: 'nodejs18.x',
+  });
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    FunctionName: 'create-lambda',
+    Runtime: 'nodejs18.x',
+  });
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    FunctionName: 'update-lambda',
+    Runtime: 'nodejs18.x',
+  });
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    FunctionName: 'get-lambda',
+    Runtime: 'nodejs18.x',
+  });
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    FunctionName: 'delete-lambda',
+    Runtime: 'nodejs18.x',
+  });
 });
