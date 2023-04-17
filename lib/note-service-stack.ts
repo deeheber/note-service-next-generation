@@ -1,11 +1,11 @@
 import { Construct } from 'constructs';
 import { Duration, Stack, StackProps } from 'aws-cdk-lib';
 import { CfnOutput, RemovalPolicy, aws_lambda as lambda } from 'aws-cdk-lib';
+import { FieldLogLevel, GraphqlApi, SchemaFile } from 'aws-cdk-lib/aws-appsync';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { FieldLogLevel, GraphqlApi, SchemaFile } from '@aws-cdk/aws-appsync-alpha';
 
 export class NoteServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -184,12 +184,16 @@ export class NoteServiceStack extends Stack {
     typeName: string;
     fieldName: string;
   }): void {
-    const { api, dataSourceName, resolverName, lambdaFunction, typeName, fieldName } = params;
-
-    const dataSource = api.addLambdaDataSource(
+    const {
+      api,
       dataSourceName,
-      lambdaFunction
-    );
+      resolverName,
+      lambdaFunction,
+      typeName,
+      fieldName,
+    } = params;
+
+    const dataSource = api.addLambdaDataSource(dataSourceName, lambdaFunction);
 
     dataSource.createResolver(resolverName, {
       typeName,
