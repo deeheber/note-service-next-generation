@@ -15,7 +15,7 @@
     "synth": "npm run cdk synth > template.yaml"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "2.59.0",
+    "aws-cdk-lib": "2.74.0",
     "constructs": "10.1.209"
   },
   "devDependencies": {
@@ -23,10 +23,10 @@
     "@aws-cdk/aws-appsync-alpha": "2.59.0-alpha.0",
     "@types/jest": "^29.2.5",
     "@types/node": "^18.11.18",
-    "aws-cdk": "2.59.0",
-    "aws-cdk-lib": "2.59.0",
-    "constructs": "10.1.209",
-    "esbuild": "^0.16.13",
+    "aws-cdk": "2.74.0",
+    "aws-cdk-lib": "2.74.0",
+    "constructs": "10.1.314",
+    "esbuild": "^0.17.17",
     "jest": "^29.3.1",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
