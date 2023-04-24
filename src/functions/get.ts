@@ -1,10 +1,10 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
 
 interface GetEvent {
   arguments: {
     id: string;
-  }
+  };
 }
 
 interface Note {
@@ -21,14 +21,17 @@ export const handler = async (event: GetEvent): Promise<Note | Error> => {
   try {
     const params = {
       TableName: process.env.TABLE_NAME,
-      Key: { id: event.arguments.id }
+      Key: { id: event.arguments.id },
     };
     const client = new DynamoDBClient({ region: process.env.AWS_REGION });
     const ddbDocClient = DynamoDBDocumentClient.from(client);
 
     const { Item } = await ddbDocClient.send(new GetCommand(params));
+    if (!Item) {
+      throw new Error(`Item with id: ${event.arguments.id} not found.`);
+    }
+
     const response = Item;
-    // TODO fix this casting
     return response as Note;
   } catch (err: any) {
     console.error(`SOMETHING WENT WRONG: ${JSON.stringify(err, undefined, 2)}`);

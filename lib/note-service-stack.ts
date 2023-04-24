@@ -131,8 +131,8 @@ export class NoteServiceStack extends Stack {
       typeName: 'Mutation',
       fieldName: 'updateNote',
     });
-
-    notesTable.grantWriteData(updateLambda);
+    // TODO: could probably have a more restrictive IAM policy
+    notesTable.grantReadWriteData(updateLambda);
 
     // Output Stack Variables
     new CfnOutput(this, 'apiURL', {

@@ -1,10 +1,10 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, DeleteCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, DeleteCommand } from '@aws-sdk/lib-dynamodb';
 
 interface DeleteEvent {
   arguments: {
     id: string;
-  }
+  };
 }
 
 export const handler = async (event: DeleteEvent): Promise<string | Error> => {
@@ -12,12 +12,11 @@ export const handler = async (event: DeleteEvent): Promise<string | Error> => {
 
   try {
     const id = event.arguments.id;
-    // TODO possibly add a condition expression that checks the item exists before deleting it
     const params = {
       TableName: process.env.TABLE_NAME,
-      Key: { id }
+      Key: { id },
     };
-    
+
     const client = new DynamoDBClient({ region: process.env.AWS_REGION });
     const ddbDocClient = DynamoDBDocumentClient.from(client);
     await ddbDocClient.send(new DeleteCommand(params));
