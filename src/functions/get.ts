@@ -1,40 +1,40 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb'
 
 interface GetEvent {
   arguments: {
-    id: string;
-  };
+    id: string
+  }
 }
 
 interface Note {
-  id: string;
-  content: string;
-  author: string;
-  createdAt: string;
-  updatedAt?: string;
+  id: string
+  content: string
+  author: string
+  createdAt: string
+  updatedAt?: string
 }
 
 export const handler = async (event: GetEvent): Promise<Note | Error> => {
-  console.log(JSON.stringify(event, undefined, 2));
+  console.log(JSON.stringify(event, undefined, 2))
 
   try {
     const params = {
       TableName: process.env.TABLE_NAME,
       Key: { id: event.arguments.id },
-    };
-    const client = new DynamoDBClient({ region: process.env.AWS_REGION });
-    const ddbDocClient = DynamoDBDocumentClient.from(client);
+    }
+    const client = new DynamoDBClient({ region: process.env.AWS_REGION })
+    const ddbDocClient = DynamoDBDocumentClient.from(client)
 
-    const { Item } = await ddbDocClient.send(new GetCommand(params));
+    const { Item } = await ddbDocClient.send(new GetCommand(params))
     if (!Item) {
-      throw new Error(`Item with id: ${event.arguments.id} not found.`);
+      throw new Error(`Item with id: ${event.arguments.id} not found.`)
     }
 
-    const response = Item;
-    return response as Note;
+    const response = Item
+    return response as Note
   } catch (err: any) {
-    console.error(`SOMETHING WENT WRONG: ${JSON.stringify(err, undefined, 2)}`);
-    throw new Error(`${err.message}`);
+    console.error(`SOMETHING WENT WRONG: ${JSON.stringify(err, undefined, 2)}`)
+    throw new Error(`${err.message}`)
   }
-};
+}
