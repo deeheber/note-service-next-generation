@@ -1,15 +1,15 @@
-import { Construct } from 'constructs';
-import { Duration, Stack, StackProps } from 'aws-cdk-lib';
-import { CfnOutput, RemovalPolicy, aws_lambda as lambda } from 'aws-cdk-lib';
-import { FieldLogLevel, GraphqlApi, SchemaFile } from 'aws-cdk-lib/aws-appsync';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { Construct } from 'constructs'
+import { Duration, Stack, StackProps } from 'aws-cdk-lib'
+import { CfnOutput, RemovalPolicy, aws_lambda as lambda } from 'aws-cdk-lib'
+import { FieldLogLevel, GraphqlApi, SchemaFile } from 'aws-cdk-lib/aws-appsync'
+import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
+import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda'
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
+import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 
 export class NoteServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     // Create GQL AppSync API
     const api = new GraphqlApi(this, 'NotesApi', {
@@ -18,7 +18,7 @@ export class NoteServiceStack extends Stack {
         fieldLogLevel: FieldLogLevel.ERROR,
       },
       schema: SchemaFile.fromAsset('src/graphql/schema.graphql'),
-    });
+    })
 
     // Create DynamoDB table
     const notesTable = new Table(this, 'NotesTable', {
@@ -27,7 +27,7 @@ export class NoteServiceStack extends Stack {
       // TODO: you probably don't want this setting in a production environment
       removalPolicy: RemovalPolicy.DESTROY,
       tableName: 'notes-table',
-    });
+    })
 
     // Create
     const createLambda = this.createAppSyncLambda({
@@ -37,7 +37,7 @@ export class NoteServiceStack extends Stack {
       environment: {
         ['TABLE_NAME']: notesTable.tableName,
       },
-    });
+    })
 
     this.createResolverMappings({
       api,
@@ -46,9 +46,9 @@ export class NoteServiceStack extends Stack {
       lambdaFunction: createLambda,
       typeName: 'Mutation',
       fieldName: 'createNote',
-    });
+    })
 
-    notesTable.grantWriteData(createLambda);
+    notesTable.grantWriteData(createLambda)
 
     // List
     const listLambda = this.createAppSyncLambda({
@@ -58,7 +58,7 @@ export class NoteServiceStack extends Stack {
       environment: {
         ['TABLE_NAME']: notesTable.tableName,
       },
-    });
+    })
 
     this.createResolverMappings({
       api,
@@ -67,9 +67,9 @@ export class NoteServiceStack extends Stack {
       lambdaFunction: listLambda,
       typeName: 'Query',
       fieldName: 'listNotes',
-    });
+    })
 
-    notesTable.grantReadData(listLambda);
+    notesTable.grantReadData(listLambda)
 
     // Get
     const getLambda = this.createAppSyncLambda({
@@ -79,7 +79,7 @@ export class NoteServiceStack extends Stack {
       environment: {
         ['TABLE_NAME']: notesTable.tableName,
       },
-    });
+    })
 
     this.createResolverMappings({
       api,
@@ -88,9 +88,9 @@ export class NoteServiceStack extends Stack {
       lambdaFunction: getLambda,
       typeName: 'Query',
       fieldName: 'getNote',
-    });
+    })
 
-    notesTable.grantReadData(getLambda);
+    notesTable.grantReadData(getLambda)
 
     // Delete
     const deleteLambda = this.createAppSyncLambda({
@@ -100,7 +100,7 @@ export class NoteServiceStack extends Stack {
       environment: {
         ['TABLE_NAME']: notesTable.tableName,
       },
-    });
+    })
 
     this.createResolverMappings({
       api,
@@ -109,9 +109,9 @@ export class NoteServiceStack extends Stack {
       lambdaFunction: deleteLambda,
       typeName: 'Mutation',
       fieldName: 'deleteNote',
-    });
+    })
 
-    notesTable.grantWriteData(deleteLambda);
+    notesTable.grantWriteData(deleteLambda)
 
     // Update
     const updateLambda = this.createAppSyncLambda({
@@ -121,7 +121,7 @@ export class NoteServiceStack extends Stack {
       environment: {
         ['TABLE_NAME']: notesTable.tableName,
       },
-    });
+    })
 
     this.createResolverMappings({
       api,
@@ -130,18 +130,18 @@ export class NoteServiceStack extends Stack {
       lambdaFunction: updateLambda,
       typeName: 'Mutation',
       fieldName: 'updateNote',
-    });
-
-    notesTable.grantWriteData(updateLambda);
+    })
+    // TODO: could probably have a more restrictive IAM policy
+    notesTable.grantReadWriteData(updateLambda)
 
     // Output Stack Variables
     new CfnOutput(this, 'apiURL', {
       value: api.graphqlUrl,
-    });
+    })
 
     new CfnOutput(this, 'apiId', {
       value: api.apiId,
-    });
+    })
 
     /**
      * Quick hack to quickly get the GQL API key
@@ -155,14 +155,14 @@ export class NoteServiceStack extends Stack {
   }
 
   private createAppSyncLambda(params: {
-    lambdaId: string;
-    functionName: string;
-    entry: string;
+    lambdaId: string
+    functionName: string
+    entry: string
     environment: {
-      [key: string]: string;
-    };
+      [key: string]: string
+    }
   }): lambda.Function {
-    const { lambdaId, functionName, entry, environment } = params;
+    const { lambdaId, functionName, entry, environment } = params
 
     return new NodejsFunction(this, lambdaId, {
       functionName,
@@ -173,16 +173,16 @@ export class NoteServiceStack extends Stack {
       timeout: Duration.seconds(15),
       memorySize: 3008,
       environment,
-    });
+    })
   }
 
   private createResolverMappings(params: {
-    api: GraphqlApi;
-    dataSourceName: string;
-    resolverName: string;
-    lambdaFunction: lambda.Function;
-    typeName: string;
-    fieldName: string;
+    api: GraphqlApi
+    dataSourceName: string
+    resolverName: string
+    lambdaFunction: lambda.Function
+    typeName: string
+    fieldName: string
   }): void {
     const {
       api,
@@ -191,13 +191,13 @@ export class NoteServiceStack extends Stack {
       lambdaFunction,
       typeName,
       fieldName,
-    } = params;
+    } = params
 
-    const dataSource = api.addLambdaDataSource(dataSourceName, lambdaFunction);
+    const dataSource = api.addLambdaDataSource(dataSourceName, lambdaFunction)
 
     dataSource.createResolver(resolverName, {
       typeName,
       fieldName,
-    });
+    })
   }
 }
