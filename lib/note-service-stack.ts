@@ -1,7 +1,8 @@
+import * as path from 'path'
 import { Construct } from 'constructs'
 import { Duration, Stack, StackProps } from 'aws-cdk-lib'
 import { CfnOutput, RemovalPolicy, aws_lambda as lambda } from 'aws-cdk-lib'
-import { FieldLogLevel, GraphqlApi, SchemaFile } from 'aws-cdk-lib/aws-appsync'
+import { Definition, FieldLogLevel, GraphqlApi } from 'aws-cdk-lib/aws-appsync'
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
@@ -17,7 +18,9 @@ export class NoteServiceStack extends Stack {
       logConfig: {
         fieldLogLevel: FieldLogLevel.ERROR,
       },
-      schema: SchemaFile.fromAsset('src/graphql/schema.graphql'),
+      definition: Definition.fromFile(
+        path.join(__dirname, '../src/graphql/schema.graphql')
+      ),
     })
 
     // Create DynamoDB table
