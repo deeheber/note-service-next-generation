@@ -1,4 +1,4 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { DynamoDBClient, Select } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb'
 
 interface Note {
@@ -20,7 +20,7 @@ export const handler = async (event: any): Promise<NotesList | Error> => {
   try {
     const params = {
       TableName: process.env.TABLE_NAME,
-      Select: 'ALL_ATTRIBUTES',
+      Select: 'ALL_ATTRIBUTES' as Select,
     }
     const client = new DynamoDBClient({ region: process.env.AWS_REGION })
     const ddbDocClient = DynamoDBDocumentClient.from(client)
