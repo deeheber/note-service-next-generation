@@ -2,7 +2,14 @@ import * as path from 'path'
 import { Construct } from 'constructs'
 import { Duration, Stack, StackProps } from 'aws-cdk-lib'
 import { CfnOutput, RemovalPolicy, aws_lambda as lambda } from 'aws-cdk-lib'
-import { Definition, FieldLogLevel, GraphqlApi } from 'aws-cdk-lib/aws-appsync'
+import {
+  Code,
+  Definition,
+  FieldLogLevel,
+  FunctionRuntime,
+  GraphqlApi,
+  Resolver,
+} from 'aws-cdk-lib/aws-appsync'
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
@@ -27,10 +34,14 @@ export class NoteServiceStack extends Stack {
     const notesTable = new Table(this, 'NotesTable', {
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: { name: 'id', type: AttributeType.STRING },
-      // TODO: you probably don't want this setting in a production environment
       removalPolicy: RemovalPolicy.DESTROY,
       tableName: 'notes-table',
     })
+
+    // DynamoDB table data source
+    const notesDS = api.addDynamoDbDataSource('NotesDataSource', notesTable)
+
+    notesTable.grantReadWriteData(notesDS)
 
     // Create
     const createLambda = this.createAppSyncLambda({
@@ -75,25 +86,14 @@ export class NoteServiceStack extends Stack {
     notesTable.grantReadData(listLambda)
 
     // Get
-    const getLambda = this.createAppSyncLambda({
-      lambdaId: 'GetLambda',
-      functionName: 'get-lambda',
-      entry: 'dist/src/functions/get.js',
-      environment: {
-        ['TABLE_NAME']: notesTable.tableName,
-      },
-    })
-
-    this.createResolverMappings({
+    new Resolver(this, 'getNoteResolver', {
       api,
-      dataSourceName: 'getDatasource',
-      resolverName: 'getResolver',
-      lambdaFunction: getLambda,
       typeName: 'Query',
       fieldName: 'getNote',
+      dataSource: notesDS,
+      code: Code.fromAsset('lib/gql-functions/get.js'),
+      runtime: FunctionRuntime.JS_1_0_0,
     })
-
-    notesTable.grantReadData(getLambda)
 
     // Delete
     const deleteLambda = this.createAppSyncLambda({

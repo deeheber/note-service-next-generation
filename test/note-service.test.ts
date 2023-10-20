@@ -26,11 +26,12 @@ test('Verify resources are created', () => {
     Runtime: 'nodejs18.x',
   })
   template.hasResourceProperties('AWS::Lambda::Function', {
-    FunctionName: 'get-lambda',
-    Runtime: 'nodejs18.x',
-  })
-  template.hasResourceProperties('AWS::Lambda::Function', {
     FunctionName: 'delete-lambda',
     Runtime: 'nodejs18.x',
+  })
+  template.hasResourceProperties('AWS::AppSync::Resolver', {
+    FieldName: 'getNote',
+    TypeName: 'Query',
+    DataSourceName: 'NotesDataSource',
   })
 })
