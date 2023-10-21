@@ -1,4 +1,4 @@
-import * as ddb from '@aws-appsync/utils/dynamodb'
+import { put } from '@aws-appsync/utils/dynamodb'
 import { Context, util } from '@aws-appsync/utils'
 
 export const request = (ctx: Context) => {
@@ -12,7 +12,7 @@ export const request = (ctx: Context) => {
     createdAt: util.time.nowISO8601(),
   }
 
-  return ddb.put({
+  return put({
     item: newNote,
     key: { id },
   })

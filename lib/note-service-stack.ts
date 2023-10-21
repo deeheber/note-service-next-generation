@@ -74,25 +74,14 @@ export class NoteServiceStack extends Stack {
     })
 
     // Delete
-    const deleteLambda = this.createAppSyncLambda({
-      lambdaId: 'DeleteLambda',
-      functionName: 'delete-lambda',
-      entry: 'dist/src/functions/delete.js',
-      environment: {
-        ['TABLE_NAME']: notesTable.tableName,
-      },
-    })
-
-    this.createResolverMappings({
+    new Resolver(this, 'deleteResolver', {
       api,
-      dataSourceName: 'deleteDatasource',
-      resolverName: 'deleteResolver',
-      lambdaFunction: deleteLambda,
       typeName: 'Mutation',
       fieldName: 'deleteNote',
+      dataSource: notesDS,
+      code: Code.fromAsset('lib/gql-functions/delete.js'),
+      runtime: FunctionRuntime.JS_1_0_0,
     })
-
-    notesTable.grantWriteData(deleteLambda)
 
     // Update
     const updateLambda = this.createAppSyncLambda({
