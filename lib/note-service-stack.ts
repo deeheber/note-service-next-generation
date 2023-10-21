@@ -1,7 +1,6 @@
 import * as path from 'path'
 import { Construct } from 'constructs'
-import { Duration, Stack, StackProps } from 'aws-cdk-lib'
-import { CfnOutput, RemovalPolicy, aws_lambda as lambda } from 'aws-cdk-lib'
+import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib'
 import {
   Code,
   Definition,
@@ -11,9 +10,6 @@ import {
   Resolver,
 } from 'aws-cdk-lib/aws-appsync'
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
-import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda'
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
-import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 
 export class NoteServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -43,6 +39,7 @@ export class NoteServiceStack extends Stack {
 
     notesTable.grantReadWriteData(notesDS)
 
+    // Resolvers
     // Create
     new Resolver(this, 'createResolver', {
       api,
@@ -84,25 +81,14 @@ export class NoteServiceStack extends Stack {
     })
 
     // Update
-    const updateLambda = this.createAppSyncLambda({
-      lambdaId: 'UpdateLambda',
-      functionName: 'update-lambda',
-      entry: 'dist/src/functions/update.js',
-      environment: {
-        ['TABLE_NAME']: notesTable.tableName,
-      },
-    })
-
-    this.createResolverMappings({
+    new Resolver(this, 'updateResolver', {
       api,
-      dataSourceName: 'updateDatasource',
-      resolverName: 'updateResolver',
-      lambdaFunction: updateLambda,
       typeName: 'Mutation',
       fieldName: 'updateNote',
+      dataSource: notesDS,
+      code: Code.fromAsset('lib/gql-functions/update.js'),
+      runtime: FunctionRuntime.JS_1_0_0,
     })
-    // TODO: could probably have a more restrictive IAM policy
-    notesTable.grantReadWriteData(updateLambda)
 
     // Output Stack Variables
     new CfnOutput(this, 'apiURL', {
@@ -122,52 +108,5 @@ export class NoteServiceStack extends Stack {
     //     value: api.apiKey
     //   });
     // }
-  }
-
-  private createAppSyncLambda(params: {
-    lambdaId: string
-    functionName: string
-    entry: string
-    environment: {
-      [key: string]: string
-    }
-  }): lambda.Function {
-    const { lambdaId, functionName, entry, environment } = params
-
-    return new NodejsFunction(this, lambdaId, {
-      functionName,
-      runtime: Runtime.NODEJS_18_X,
-      entry,
-      logRetention: RetentionDays.ONE_WEEK,
-      architecture: Architecture.ARM_64,
-      timeout: Duration.seconds(15),
-      memorySize: 3008,
-      environment,
-    })
-  }
-
-  private createResolverMappings(params: {
-    api: GraphqlApi
-    dataSourceName: string
-    resolverName: string
-    lambdaFunction: lambda.Function
-    typeName: string
-    fieldName: string
-  }): void {
-    const {
-      api,
-      dataSourceName,
-      resolverName,
-      lambdaFunction,
-      typeName,
-      fieldName,
-    } = params
-
-    const dataSource = api.addLambdaDataSource(dataSourceName, lambdaFunction)
-
-    dataSource.createResolver(resolverName, {
-      typeName,
-      fieldName,
-    })
   }
 }
