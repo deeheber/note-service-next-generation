@@ -1,5 +1,6 @@
 import { update, operations } from '@aws-appsync/utils/dynamodb'
 import { Context, util } from '@aws-appsync/utils'
+import { Note } from './types'
 
 export const request = (ctx: Context) => {
   const { id, content } = ctx.args
@@ -16,7 +17,7 @@ export const request = (ctx: Context) => {
   })
 }
 
-export const response = (ctx: Context) => {
+export const response = (ctx: Context): Note | void => {
   const { result, error } = ctx
 
   if (error) {

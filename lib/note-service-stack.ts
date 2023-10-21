@@ -22,7 +22,7 @@ export class NoteServiceStack extends Stack {
         fieldLogLevel: FieldLogLevel.ERROR,
       },
       definition: Definition.fromFile(
-        path.join(__dirname, '../src/graphql/schema.graphql')
+        path.join(__dirname, '../src/schema.graphql')
       ),
     })
 
@@ -44,27 +44,27 @@ export class NoteServiceStack extends Stack {
       {
         typeName: 'Query',
         fieldName: 'getNote',
-        codePath: 'lib/gql-functions/get.js',
+        codePath: 'lib/gql/get.js',
       },
       {
         typeName: 'Query',
         fieldName: 'listNotes',
-        codePath: 'lib/gql-functions/list.js',
+        codePath: 'lib/gql/list.js',
       },
       {
         typeName: 'Mutation',
         fieldName: 'createNote',
-        codePath: 'lib/gql-functions/create.js',
+        codePath: 'lib/gql/create.js',
       },
       {
         typeName: 'Mutation',
         fieldName: 'updateNote',
-        codePath: 'lib/gql-functions/update.js',
+        codePath: 'lib/gql/update.js',
       },
       {
         typeName: 'Mutation',
         fieldName: 'deleteNote',
-        codePath: 'lib/gql-functions/delete.js',
+        codePath: 'lib/gql/delete.js',
       },
     ]
 

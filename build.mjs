@@ -1,9 +1,7 @@
 /* eslint-disable */
 import { build } from 'esbuild'
 import { glob } from 'glob'
-const files = await glob('src/gql-functions/*.ts', {
-  ignore: ['src/gql-functions/*.test.ts'],
-})
+const files = await glob('src/*.ts')
 
 console.log('Bundling files... ')
 console.log(files)
@@ -15,7 +13,7 @@ await build({
   target: 'esnext',
   platform: 'node',
   external: ['@aws-appsync/utils'],
-  outdir: 'lib/gql-functions',
+  outdir: 'lib/gql',
   entryPoints: files,
   bundle: true,
 })

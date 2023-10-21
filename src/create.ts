@@ -1,5 +1,6 @@
 import { put } from '@aws-appsync/utils/dynamodb'
 import { Context, util } from '@aws-appsync/utils'
+import { Note } from './types'
 
 export const request = (ctx: Context) => {
   const { note } = ctx.args
@@ -18,4 +19,4 @@ export const request = (ctx: Context) => {
   })
 }
 
-export const response = (ctx: Context) => ctx.result
+export const response = (ctx: Context): Note => ctx.result
