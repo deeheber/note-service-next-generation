@@ -15,7 +15,7 @@ export class NoteServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props)
 
-    // Create GQL AppSync API
+    // GQL AppSync API
     const api = new GraphqlApi(this, 'NotesApi', {
       name: 'notes-api',
       logConfig: {
@@ -26,7 +26,7 @@ export class NoteServiceStack extends Stack {
       ),
     })
 
-    // Create DynamoDB table
+    // DynamoDB table
     const notesTable = new Table(this, 'NotesTable', {
       billingMode: BillingMode.PAY_PER_REQUEST,
       partitionKey: { name: 'id', type: AttributeType.STRING },
@@ -39,56 +39,47 @@ export class NoteServiceStack extends Stack {
 
     notesTable.grantReadWriteData(notesDS)
 
-    // Resolvers
-    // Create
-    new Resolver(this, 'createResolver', {
-      api,
-      typeName: 'Mutation',
-      fieldName: 'createNote',
-      dataSource: notesDS,
-      code: Code.fromAsset('lib/gql-functions/create.js'),
-      runtime: FunctionRuntime.JS_1_0_0,
-    })
+    // GQL resolvers
+    const resolvers = [
+      {
+        typeName: 'Query',
+        fieldName: 'getNote',
+        codePath: 'lib/gql-functions/get.js',
+      },
+      {
+        typeName: 'Query',
+        fieldName: 'listNotes',
+        codePath: 'lib/gql-functions/list.js',
+      },
+      {
+        typeName: 'Mutation',
+        fieldName: 'createNote',
+        codePath: 'lib/gql-functions/create.js',
+      },
+      {
+        typeName: 'Mutation',
+        fieldName: 'updateNote',
+        codePath: 'lib/gql-functions/update.js',
+      },
+      {
+        typeName: 'Mutation',
+        fieldName: 'deleteNote',
+        codePath: 'lib/gql-functions/delete.js',
+      },
+    ]
 
-    // List
-    new Resolver(this, 'listResolver', {
-      api,
-      typeName: 'Query',
-      fieldName: 'listNotes',
-      dataSource: notesDS,
-      code: Code.fromAsset('lib/gql-functions/list.js'),
-      runtime: FunctionRuntime.JS_1_0_0,
-    })
+    for (const resolver of resolvers) {
+      const { typeName, fieldName, codePath } = resolver
 
-    // Get
-    new Resolver(this, 'getResolver', {
-      api,
-      typeName: 'Query',
-      fieldName: 'getNote',
-      dataSource: notesDS,
-      code: Code.fromAsset('lib/gql-functions/get.js'),
-      runtime: FunctionRuntime.JS_1_0_0,
-    })
-
-    // Delete
-    new Resolver(this, 'deleteResolver', {
-      api,
-      typeName: 'Mutation',
-      fieldName: 'deleteNote',
-      dataSource: notesDS,
-      code: Code.fromAsset('lib/gql-functions/delete.js'),
-      runtime: FunctionRuntime.JS_1_0_0,
-    })
-
-    // Update
-    new Resolver(this, 'updateResolver', {
-      api,
-      typeName: 'Mutation',
-      fieldName: 'updateNote',
-      dataSource: notesDS,
-      code: Code.fromAsset('lib/gql-functions/update.js'),
-      runtime: FunctionRuntime.JS_1_0_0,
-    })
+      new Resolver(this, `${fieldName}Resolver`, {
+        api,
+        typeName: typeName,
+        fieldName: fieldName,
+        dataSource: notesDS,
+        code: Code.fromAsset(codePath),
+        runtime: FunctionRuntime.JS_1_0_0,
+      })
+    }
 
     // Output Stack Variables
     new CfnOutput(this, 'apiURL', {

@@ -5,7 +5,7 @@ const files = await glob('src/gql-functions/*.ts', {
   ignore: ['src/gql-functions/*.test.ts'],
 })
 
-console.log('files: ' + files)
+console.log('Bundling files... ')
 console.log(files)
 
 await build({
