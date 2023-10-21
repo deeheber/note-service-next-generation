@@ -44,25 +44,14 @@ export class NoteServiceStack extends Stack {
     notesTable.grantReadWriteData(notesDS)
 
     // Create
-    const createLambda = this.createAppSyncLambda({
-      lambdaId: 'CreateLambda',
-      functionName: 'create-lambda',
-      entry: 'dist/src/functions/create.js',
-      environment: {
-        ['TABLE_NAME']: notesTable.tableName,
-      },
-    })
-
-    this.createResolverMappings({
+    new Resolver(this, 'createResolver', {
       api,
-      dataSourceName: 'createDatasource',
-      resolverName: 'createResolver',
-      lambdaFunction: createLambda,
       typeName: 'Mutation',
       fieldName: 'createNote',
+      dataSource: notesDS,
+      code: Code.fromAsset('lib/gql-functions/create.js'),
+      runtime: FunctionRuntime.JS_1_0_0,
     })
-
-    notesTable.grantWriteData(createLambda)
 
     // List
     new Resolver(this, 'listResolver', {
