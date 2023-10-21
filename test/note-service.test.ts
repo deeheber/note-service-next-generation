@@ -14,10 +14,6 @@ test('Verify resources are created', () => {
   template.resourceCountIs('AWS::AppSync::Resolver', 5)
 
   template.hasResourceProperties('AWS::Lambda::Function', {
-    FunctionName: 'list-lambda',
-    Runtime: 'nodejs18.x',
-  })
-  template.hasResourceProperties('AWS::Lambda::Function', {
     FunctionName: 'create-lambda',
     Runtime: 'nodejs18.x',
   })
@@ -31,6 +27,11 @@ test('Verify resources are created', () => {
   })
   template.hasResourceProperties('AWS::AppSync::Resolver', {
     FieldName: 'getNote',
+    TypeName: 'Query',
+    DataSourceName: 'NotesDataSource',
+  })
+  template.hasResourceProperties('AWS::AppSync::Resolver', {
+    FieldName: 'listNotes',
     TypeName: 'Query',
     DataSourceName: 'NotesDataSource',
   })

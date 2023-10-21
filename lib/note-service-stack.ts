@@ -65,28 +65,17 @@ export class NoteServiceStack extends Stack {
     notesTable.grantWriteData(createLambda)
 
     // List
-    const listLambda = this.createAppSyncLambda({
-      lambdaId: 'ListLambda',
-      functionName: 'list-lambda',
-      entry: 'dist/src/functions/list.js',
-      environment: {
-        ['TABLE_NAME']: notesTable.tableName,
-      },
-    })
-
-    this.createResolverMappings({
+    new Resolver(this, 'listResolver', {
       api,
-      dataSourceName: 'listDatasource',
-      resolverName: 'listResolver',
-      lambdaFunction: listLambda,
       typeName: 'Query',
       fieldName: 'listNotes',
+      dataSource: notesDS,
+      code: Code.fromAsset('lib/gql-functions/list.js'),
+      runtime: FunctionRuntime.JS_1_0_0,
     })
 
-    notesTable.grantReadData(listLambda)
-
     // Get
-    new Resolver(this, 'getNoteResolver', {
+    new Resolver(this, 'getResolver', {
       api,
       typeName: 'Query',
       fieldName: 'getNote',
