@@ -13,24 +13,32 @@ test('Verify resources are created', () => {
   template.resourceCountIs('AWS::AppSync::GraphQLSchema', 1)
   template.resourceCountIs('AWS::AppSync::Resolver', 5)
 
-  template.hasResourceProperties('AWS::Lambda::Function', {
-    FunctionName: 'list-lambda',
-    Runtime: 'nodejs18.x',
+  template.hasResourceProperties('AWS::AppSync::DataSource', {
+    Type: 'AMAZON_DYNAMODB',
   })
-  template.hasResourceProperties('AWS::Lambda::Function', {
-    FunctionName: 'create-lambda',
-    Runtime: 'nodejs18.x',
+  template.hasResourceProperties('AWS::AppSync::Resolver', {
+    FieldName: 'getNote',
+    TypeName: 'Query',
+    DataSourceName: 'NotesDataSource',
   })
-  template.hasResourceProperties('AWS::Lambda::Function', {
-    FunctionName: 'update-lambda',
-    Runtime: 'nodejs18.x',
+  template.hasResourceProperties('AWS::AppSync::Resolver', {
+    FieldName: 'listNotes',
+    TypeName: 'Query',
+    DataSourceName: 'NotesDataSource',
   })
-  template.hasResourceProperties('AWS::Lambda::Function', {
-    FunctionName: 'get-lambda',
-    Runtime: 'nodejs18.x',
+  template.hasResourceProperties('AWS::AppSync::Resolver', {
+    FieldName: 'createNote',
+    TypeName: 'Mutation',
+    DataSourceName: 'NotesDataSource',
   })
-  template.hasResourceProperties('AWS::Lambda::Function', {
-    FunctionName: 'delete-lambda',
-    Runtime: 'nodejs18.x',
+  template.hasResourceProperties('AWS::AppSync::Resolver', {
+    FieldName: 'deleteNote',
+    TypeName: 'Mutation',
+    DataSourceName: 'NotesDataSource',
+  })
+  template.hasResourceProperties('AWS::AppSync::Resolver', {
+    FieldName: 'updateNote',
+    TypeName: 'Mutation',
+    DataSourceName: 'NotesDataSource',
   })
 })

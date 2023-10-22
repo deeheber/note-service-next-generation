@@ -9,3 +9,4 @@ cdk.out
 
 dist
 template.yaml
+lib/gql
