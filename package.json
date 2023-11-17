@@ -18,14 +18,14 @@
     "synth": "npm run build && npm run cdk synth > template.yaml"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "2.102.0",
+    "aws-cdk-lib": "2.110.0",
     "constructs": "10.3.0"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.6",
-    "@types/node": "^20.8.7",
-    "aws-cdk": "2.102.0",
-    "aws-cdk-lib": "2.102.0",
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.9.1",
+    "aws-cdk": "2.110.0",
+    "aws-cdk-lib": "2.110.0",
     "constructs": "10.3.0",
     "esbuild": "^0.19.5",
     "jest": "^29.7.0",
@@ -35,9 +35,9 @@
   },
   "dependencies": {
     "@aws-appsync/utils": "^1.5.0",
-    "@aws-sdk/client-dynamodb": "^3.431.0",
-    "@aws-sdk/lib-dynamodb": "^3.431.0",
-    "@aws-sdk/util-dynamodb": "^3.431.0",
+    "@aws-sdk/client-dynamodb": "^3.451.0",
+    "@aws-sdk/lib-dynamodb": "^3.451.0",
+    "@aws-sdk/util-dynamodb": "^3.451.0",
     "glob": "^10.3.10"
   }
 }

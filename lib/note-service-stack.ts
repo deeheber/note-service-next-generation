@@ -10,6 +10,7 @@ import {
   Resolver,
 } from 'aws-cdk-lib/aws-appsync'
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb'
+import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 
 export class NoteServiceStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -19,7 +20,8 @@ export class NoteServiceStack extends Stack {
     const api = new GraphqlApi(this, 'NotesApi', {
       name: 'notes-api',
       logConfig: {
-        fieldLogLevel: FieldLogLevel.ERROR,
+        fieldLogLevel: FieldLogLevel.ALL,
+        retention: RetentionDays.THREE_DAYS,
       },
       definition: Definition.fromFile(
         path.join(__dirname, '../src/schema.graphql')
