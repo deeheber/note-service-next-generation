@@ -38,7 +38,7 @@ export class NoteServiceStack extends Stack {
         },
       },
       logConfig: {
-        fieldLogLevel: FieldLogLevel.ALL,
+        fieldLogLevel: FieldLogLevel.ERROR,
         retention: RetentionDays.THREE_DAYS,
       },
       definition: Definition.fromFile(
