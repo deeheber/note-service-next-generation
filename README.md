@@ -21,13 +21,13 @@ Rewriting [note-service](https://github.com/deeheber/note-service) using CDK, Ty
 
 ### Authorization
 
-Currently this application is using the default authorization setting which is auth via API key. You can obtain the API key by logging into the AWS AppSync console after a successful deploy. Alternatively, you can run this command using the AWS CLI and the `apiId` that printed out to your console after a successfuly deploy to obtain your key:
+Currently this application is using the API key authorization setting. You can obtain the API key by logging into the AWS AppSync console after a successful deploy. Alternatively, you can run this command using the AWS CLI and the `apiId` that printed out to your console after a successfuly deploy to obtain your key:
 
 ```
 aws appsync list-api-keys --api-id <api id here>
 ```
 
-This is key is good for 7 days then refreshes.
+The key is good for 30 days after deploy. After that you'll need to generate a new one.
 
 If you're using Postman or making API calls through a client make sure to set a header `x-api-key` to the value of your API key.
 
