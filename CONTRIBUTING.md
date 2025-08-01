@@ -11,7 +11,7 @@ Examples of behavior that contributes to creating a positive environment include
 - Focusing on what is best for the community
 - Showing empathy towards other community members
 
-If you have any question about the standards or see any violations that have not been addressed, please send a direct message to [@deeheber on Twitter](https://twitter.com/deeheber).
+If you have any question about the standards or see any violations that have not been addressed, please contact [Danielle via the social media links in the footer](https://danielleheberling.xyz/).
 
 ## Logging Issues
 If you find a bug or have a question, feel free to open a new issue and our maintainers will reply as soon as they possibly can. Please describe the issue including steps to reproduce if there are any.
@@ -24,4 +24,4 @@ If you find a bug or have a question, feel free to open a new issue and our main
 5. If your PR fixes an open issue be sure to write `fixes #[ issue number here ]` in the PR description.
 
 ## Finding Help
-Please send a direct message to [@deeheber on Twitter](https://twitter.com/deeheber) if any of your questions have not been addressed by the documentation in this repository.
+Please contact [Danielle via the social media links in the footer](https://danielleheberling.xyz/) if any of your questions have not been addressed by the documentation in this repository.
